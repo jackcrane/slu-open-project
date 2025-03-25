@@ -237,6 +237,7 @@ export const get = [
             },
             include: {
               material: true,
+              secondaryMaterial: true,
               resource: true,
             },
           },
@@ -250,6 +251,7 @@ export const get = [
           additionalCosts: {
             include: {
               material: true,
+              secondaryMaterial: true,
               resource: true,
             },
           },
