@@ -125,6 +125,28 @@ describe("/shop/[shopId]", () => {
       });
     });
 
+    it("returns a shop when a user is a global admin but not a member of the shop", async () => {
+      const res = await request(app)
+        .get(`/api/shop/${tc.shop.id}?includeUsers=true`)
+        .set(...(await gt({ ga: true })))
+        .send();
+
+      expect(res.status).toBe(200);
+      expect(res.body.users).toHaveLength(1);
+      expect(res.body.users[0]).toMatchSnapshot({
+        createdAt: expect.any(String),
+        id: expect.any(String),
+        shopId: expect.any(String),
+        updatedAt: expect.any(String),
+        userId: expect.any(String),
+        user: {
+          createdAt: expect.any(String),
+          id: expect.any(String),
+          updatedAt: expect.any(String),
+        },
+      });
+    });
+
     it("returns 403 when the user is not an admin (customer) but requests users", async () => {
       const userShop = await prisma.userShop.findFirst({
         where: {
